@@ -1,0 +1,312 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Envelope Animation</title>
+
+  <style>
+    *{margin:0;padding:0;box-sizing:border-box}
+
+    body{
+      height:100vh;width:100%;
+      display:flex;justify-content:center;align-items:center;
+      font-family:'Playfair Display','Georgia',serif;
+      background:linear-gradient(180deg,#fde6ee,#fff6e8);
+      overflow:hidden;
+    }
+
+    /* ===== ENVELOPE ===== */
+    .wrapper{
+      height:200px;width:300px;
+      position:relative;
+      display:flex;justify-content:center;
+      perspective:1000px;
+      transition:transform 1s cubic-bezier(.22,.61,.36,1), opacity .6s ease;
+      cursor:pointer;
+    }
+
+    .lid{
+      position:absolute;height:100%;width:100%;top:0;left:0;
+      border-right:150px solid transparent;
+      border-bottom:100px solid transparent;
+      border-left:150px solid transparent;
+      transform-origin:top;
+      transform-style:preserve-3d;
+      backface-visibility:hidden;
+      transition:transform .55s cubic-bezier(.22,.61,.36,1);
+    }
+
+    .lid.one{border-top:100px solid #f9f7f3;z-index:3;transition-delay:.75s}
+    .lid.two{border-top:100px solid #f9f7f3;transform:rotateX(90deg);z-index:1;transition-delay:.5s}
+
+    .envelope{
+      position:absolute;height:100%;width:100%;top:0;left:0;
+      border-top:100px solid transparent;
+      border-right:150px solid #f9f7f3;
+      border-bottom:100px solid #f2efe9;
+      border-left:150px solid #f5f2ec;
+      z-index:3;
+      background-image:radial-gradient(rgba(0,0,0,.03) 1px, transparent 1px);
+      background-size:6px 6px;
+      filter:brightness(.98);
+    }
+
+    .wrapper.open .envelope{pointer-events:none}
+
+    .letter{
+      position:absolute;top:0;
+      width:80%;height:80%;
+      background:#fff;border-radius:15px;
+      z-index:2;
+      transition:transform .5s ease;
+      display:flex;align-items:center;justify-content:center;
+      pointer-events:none;
+    }
+
+    .wrapper.open .letter{pointer-events:auto}
+
+    .letter-content{display:flex;flex-direction:column;align-items:center}
+    .letter p{font-size:30px;color:#3B4049;margin-bottom:14px}
+
+    .open-letter{
+      border:none;
+      background:linear-gradient(180deg,#ff6f91,#ff9aa2);
+      color:#fff;
+      padding:6px 14px;
+      border-radius:999px;
+      font-size:12px;font-weight:600;
+      box-shadow:0 6px 12px rgba(0,0,0,.18);
+      cursor:pointer;
+    }
+
+    .seal{
+      position:absolute;top:50%;left:50%;
+      transform:translate(-50%,-30%);
+      font-size:28px;z-index:5;
+      pointer-events:none;
+      animation:pulse 2s ease-in-out infinite;
+    }
+
+    @keyframes pulse{
+      0%{transform:translate(-50%,-30%) scale(1)}
+      50%{transform:translate(-50%,-30%) scale(1.08)}
+      100%{transform:translate(-50%,-30%) scale(1)}
+    }
+
+    /* OPEN */
+    .wrapper.open .lid.one{transform:rotateX(90deg);transition-delay:0s}
+    .wrapper.open .lid.two{transform:rotateX(180deg);transition-delay:.25s}
+    .wrapper.open .letter{transform:translateY(-70px) scale(1.02);transition-delay:.5s}
+    .wrapper.open .seal{opacity:0;animation:none}
+
+    /* EXIT */
+    .wrapper.exit{
+      transform:translateY(180px);
+      opacity:0;
+      pointer-events:none;
+    }
+
+    /* ===== PAPER PAGE ===== */
+    .paper-page{
+      position:fixed;inset:0;
+      display:flex;align-items:center;justify-content:center;
+      opacity:0;pointer-events:none;
+      transition:opacity .6s ease;
+      z-index:10;
+      background:linear-gradient(180deg,#fde6ee,#fff6e8);
+    }
+
+    body.show-paper .paper-page{opacity:1;pointer-events:auto}
+
+    .paper{
+      width:100%;max-width:390px;
+      height:100%;max-height:844px;
+      background:linear-gradient(180deg,#ffffff 0%,#fff7fa 100%);
+      padding:56px 24px 40px;
+      text-align:center;
+      display:flex;flex-direction:column;justify-content:space-between;
+    }
+
+    .paper h1{font-size:34px;font-weight:600;margin-bottom:12px;color:#1c1c1e}
+    .paper p{font-size:22px;margin-bottom:24px;color:#ff2d55}
+
+    .valentine-gif{max-width:280px;margin:0 auto 24px;border-radius:16px}
+
+    .buttons{display:flex;flex-direction:column;gap:16px;align-items:center}
+
+    .yes{
+      padding:16px;border-radius:999px;border:none;background:#ff2d55;color:#fff;
+      font-size:17px;font-weight:600;width:80%;max-width:280px;
+      animation:yesPulse 2.2s ease-in-out infinite;
+    }
+
+    @keyframes yesPulse{0%,100%{transform:scale(1)}50%{transform:scale(1.04)}}
+
+    .no{
+      padding:14px;border-radius:999px;border:1px solid #ffd1dc;background:#fff;
+      color:#ff2d55;font-size:16px;font-weight:600;width:80%;max-width:280px;
+    }
+
+    /* ===== CELEBRATION ===== */
+    .celebrate{
+      position:fixed;inset:0;display:flex;flex-direction:column;
+      align-items:center;justify-content:center;
+      background:linear-gradient(180deg,#ffdde7,#fff6f9);
+      z-index:20;opacity:0;pointer-events:none;transition:opacity .5s ease;
+    }
+
+    body.show-celebrate .celebrate{opacity:1;pointer-events:auto}
+
+    .emoji-rain{
+      position:fixed;inset:0;overflow:hidden;pointer-events:none;
+    }
+
+    .emoji{
+      position:absolute;
+      font-size:24px;
+      animation:fall 3.5s linear infinite;
+    }
+
+    @keyframes fall{
+      from{transform:translateY(-10vh);opacity:1}
+      to{transform:translateY(110vh);opacity:0}
+    }
+  </style>
+</head>
+<body>
+
+  <div class="wrapper" id="wrapper">
+    <div class="lid one"></div>
+    <div class="lid two"></div>
+    <div class="envelope"></div>
+    <div class="seal">💖</div>
+    <div class="letter">
+      <div class="letter-content">
+        <p>Hi Juls</p>
+        <button class="open-letter" id="continueBtn">Click here 💌</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="paper-page">
+    <div class="paper">
+      <img class="valentine-gif" src="https://media3.giphy.com/media/v1.Y2lkPTc5MGI3NjExNnRuOGhid3dpeW5pbjEwanV2OWx6amppMjB0Ynh2c2c2MTg3NGp6MCZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/MDJ9IbxxvDUQM/giphy.gif" />
+      <h1>Hi Juls</h1>
+      <p>Will you be my Valentine? 💖</p>
+      <div class="buttons">
+        <button class="yes">Yes 💗</button>
+        <button class="no">No</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="celebrate">
+    <h1>SHE SAID YES 💖</h1>
+    <div class="emoji-rain" id="emojiRain"></div>
+  </div>
+
+  <script>
+    const wrapper = document.getElementById('wrapper');
+    const continueBtn = document.getElementById('continueBtn');
+    const yesBtn = document.querySelector('.yes');
+    const noBtn = document.querySelector('.no');
+
+    wrapper.addEventListener('click', e => {
+      if (e.target.closest('.letter')) return;
+      wrapper.classList.add('open');
+    }, { once:true });
+
+    continueBtn.addEventListener('click', e => {
+      e.stopPropagation();
+      wrapper.classList.add('exit');
+      setTimeout(() => {
+        document.body.classList.add('show-paper');
+        wrapper.style.display = 'none';
+      }, 600);
+    }, { once:true });
+
+    const gymLines = [
+      'No 😌','Nope 🙃','Don’t skip leg day 🏋️‍♀️😏','Too slow 😜',
+      'Add more reps 💪😆','Warm-up first 😤😝','Not strong enough yet 😬😈','Try again after cardio 🏃‍♀️😂'
+    ];
+
+    let shuffled = [];
+    let index = 0;
+
+    function shuffle(){
+      shuffled = [...gymLines].sort(() => Math.random() - 0.5);
+      index = 0;
+    }
+
+    shuffle();
+
+    function moveNo(e){
+      if(e) e.preventDefault();
+
+      if(index >= shuffled.length) shuffle();
+      noBtn.textContent = shuffled[index++];
+
+      const yesRect = yesBtn.getBoundingClientRect();
+      const noRect = noBtn.getBoundingClientRect();
+      const pad = 12;
+
+      const vw = window.visualViewport ? window.visualViewport.width : window.innerWidth;
+      const vh = window.visualViewport ? window.visualViewport.height : window.innerHeight;
+
+      const maxX = Math.max(0, vw - noRect.width - pad);
+      const maxY = Math.max(0, vh - noRect.height - pad);
+
+      let x, y, safe;
+      let attempts = 0;
+
+      do{
+        x = Math.random() * maxX;
+        y = Math.random() * maxY;
+        safe = !(
+          x < yesRect.right && x + noRect.width > yesRect.left &&
+          y < yesRect.bottom && y + noRect.height > yesRect.top
+        );
+        attempts++;
+      } while(!safe && attempts < 25);
+
+      x = Math.min(Math.max(pad, x), maxX);
+      y = Math.min(Math.max(pad, y), maxY);
+
+      noBtn.style.position = 'fixed';
+      noBtn.style.left = '0';
+      noBtn.style.top = '0';
+      noBtn.style.transition = 'transform .25s ease';
+      noBtn.style.transform = `translate(${x}px, ${y}px)`;
+    }
+
+    noBtn.addEventListener('mouseenter', moveNo);
+    noBtn.addEventListener('click', moveNo);
+    noBtn.addEventListener('touchstart', moveNo, { passive:false });
+
+    yesBtn.addEventListener('click', () => {
+      document.querySelector('.paper-page').style.opacity = '0';
+      setTimeout(() => {
+        document.body.classList.add('show-celebrate');
+        startEmojiRain();
+      }, 400);
+    }, { once:true });
+
+    function startEmojiRain(){
+      const rain = document.getElementById('emojiRain');
+      const hearts = ['💖','💗','💘','💕','💞'];
+
+      for(let i=0;i<30;i++){
+        const span = document.createElement('span');
+        span.className = 'emoji';
+        span.textContent = hearts[Math.floor(Math.random()*hearts.length)];
+        span.style.left = Math.random()*100 + 'vw';
+        span.style.animationDelay = Math.random()*3 + 's';
+        span.style.fontSize = 18 + Math.random()*14 + 'px';
+        rain.appendChild(span);
+      }
+    }
+  </script>
+
+</body>
+</html>

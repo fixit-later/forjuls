@@ -40,39 +40,102 @@
     .paper-page{position:fixed;inset:0;display:flex;align-items:center;justify-content:center;opacity:0;pointer-events:none;transition:opacity .6s ease;z-index:10;background:linear-gradient(180deg,#fde6ee,#fff6e8)}
     body.show-paper .paper-page{opacity:1;pointer-events:auto}
 
-    /* iPhone canvas */
+    /* iPhone canvas – Apple‑like layout */
     .paper{
-      width:100%;max-width:390px;
-      height:100%;max-height:844px;
-      background:linear-gradient(180deg,#ffffff 0%,#fff7fa 100%);
-      padding:48px 24px 40px;
-      text-align:center;
-      display:flex;flex-direction:column;align-items:center;
-    }
-
-    .paper h1{font-size:34px;font-weight:600;margin:8px 0;color:#1c1c1e}
-    .paper p{font-size:22px;margin:8px 0 20px;color:#ff2d55}
-    .valentine-gif{width:260px;max-width:80%;border-radius:16px;margin:12px 0}
-
-    /* ===== BUTTON ZONE (LOCKED) ===== */
-    .buttons{
-      margin-top:auto;
       width:100%;
+      max-width:390px;
+      height:100%;
+      max-height:844px;
+      background:linear-gradient(180deg,#fff1f5 0%,#fff8f0 100%);
+      padding:calc(env(safe-area-inset-top) + 44px) 24px 24px;
+      text-align:center;
       display:flex;
       flex-direction:column;
-      gap:16px;
       align-items:center;
+      gap:24px;
+      font-family:-apple-system,BlinkMacSystemFont,'SF Pro Display','SF Pro Text',Helvetica,Arial,sans-serif;
       position:relative;
-      padding-bottom:32px;
+      overflow:hidden;
+    }
+
+    .badge{
+      background:rgba(255,111,133,.12);
+      color:#ff6f85;
+      padding:6px 16px;
+      border-radius:999px;
+      font-size:13px;
+      font-weight:600;
+      letter-spacing:.2px;
+      border:1px solid rgba(255,111,133,.25);
+    }
+
+    .paper h1{
+      font-size:36px;
+      font-weight:700;
+      margin-top:8px;
+      margin-bottom:4px;
+      color:#ff6f85;
+      letter-spacing:-.3px;
+    }
+
+    .paper p{
+      font-size:17px;
+      line-height:1.4;
+      color:#1c1c1e;
+      margin-bottom:8px;
+    }
+
+    .valentine-img{
+      width:168px;
+      height:168px;
+      border-radius:28px;
+      object-fit:cover;
+      background:#fff;
+      border:1px solid rgba(0,0,0,.06);
+      box-shadow:
+        0 18px 40px rgba(0,0,0,.12),
+        inset 0 0 0 1px rgba(255,255,255,.6);
+      margin:12px 0 4px;
+    }
+
+    /* ===== BUTTON ZONE (SIMPLIFIED) ===== */
+    .button-container{
+      position:absolute;
+      bottom:60px;
+      left:50%;
+      transform:translateX(-50%);
+      width:90%;
+      max-width:320px;
+      height:200px;
+      opacity:0;
+      animation:fadeIn .9s cubic-bezier(.34,1.56,.64,1) forwards;
+      animation-delay:0.2s;
+    }
+
+    @keyframes fadeIn{
+      from{ opacity:0; transform:translate(-50%, 40px); }
+      to{ opacity:1; transform:translate(-50%, 0); }
     }
 
     .yes{
-      width:80%;max-width:280px;
-      padding:16px;border-radius:999px;border:none;
-      background:#ff2d55;color:#fff;
-      font-size:17px;font-weight:600;
+      position:absolute;
+      top:0;
+      left:50%;
+      transform:translateX(-50%);
+      width:50%;
+      max-width:160px;
+      padding:10px;
+      border-radius:10px;
+      border:none;
+      background:linear-gradient(180deg,#ff7a90,#ff5f7d);
+      color:#fff;
+      font-size:14px;
+      font-weight:600;
+      letter-spacing:-.2px;
+      box-shadow:0 6px 14px rgba(255,95,125,.35);
+      cursor:pointer;
       animation:yesPulse 2.2s ease-in-out infinite;
-      position:relative;z-index:2;
+      z-index:10;
     }
 
     .yes.highlight{
@@ -80,33 +143,46 @@
       animation:highlightPulse 1.2s ease-in-out infinite;
     }
 
-    @keyframes yesPulse{0%,100%{transform:scale(1)}50%{transform:scale(1.04)}}
+    @keyframes yesPulse{0%,100%{transform:translateX(-50%) scale(1)}50%{transform:translateX(-50%) scale(1.04)}}
     @keyframes highlightPulse{0%{box-shadow:0 0 0 0 rgba(255,45,85,.6)}70%{box-shadow:0 0 0 18px rgba(255,45,85,0)}100%{box-shadow:0 0 0 0 rgba(255,45,85,0)}}
 
     .no{
-      width:80%;max-width:280px;
-      padding:14px;border-radius:999px;
-      border:1px solid #ffd1dc;background:#fff;color:#ff2d55;
-      font-size:16px;font-weight:600;
       position:absolute;
-      top:100%;
-      margin-top:12px;
+      top:55px;
       left:50%;
       transform:translateX(-50%);
-      z-index:1;
-      transition:transform .35s cubic-bezier(.25,.8,.25,1);
+      width:50%;
+      max-width:160px;
+      padding:9px;
+      border-radius:10px;
+      border:1px solid rgba(0,0,0,.12);
+      background:#fff;
+      color:#1c1c1e;
+      font-size:13px;
+      font-weight:500;
+      cursor:pointer;
+      z-index:5;
+      transition:all .2s cubic-bezier(.25,.8,.25,1);
     }
 
     .no.surrender{animation:shake .35s ease-in-out 2}
-    @keyframes shake{0%{transform:translate(-50%,0)}25%{transform:translate(-54%,0)}50%{transform:translate(-46%,0)}75%{transform:translate(-52%,0)}100%{transform:translate(-50%,0)}}
+    @keyframes shake{0%,100%{transform:translateX(-50%)}25%{transform:translateX(-54%)}50%{transform:translateX(-46%)}75%{transform:translateX(-52%)}}
 
     /* ===== CELEBRATION ===== */
     .celebrate{position:fixed;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;background:linear-gradient(180deg,#ffdde7,#fff6f9);z-index:20;opacity:0;pointer-events:none;transition:opacity .5s ease}
     body.show-celebrate .celebrate{opacity:1;pointer-events:auto}
+    
+    .celebrate h1{
+      font-size:48px;
+      font-weight:700;
+      color:#ff6f85;
+      z-index:21;
+    }
 
     .emoji-rain{position:fixed;inset:0;overflow:hidden;pointer-events:none}
     .emoji{position:absolute;font-size:24px;animation:fall 3.5s linear infinite}
     @keyframes fall{from{transform:translateY(-10vh);opacity:1}to{transform:translateY(110vh);opacity:0}}
+  
   </style>
 </head>
 <body>
@@ -126,11 +202,12 @@
 
   <div class="paper-page">
     <div class="paper">
-      <img class="valentine-gif" src="https://media3.giphy.com/media/v1.Y2lkPTc5MGI3NjExNnRuOGhid3dpeW5pbjEwanV2OWx6amppMjB0Ynh2c2c2MTg3NGp6MCZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/MDJ9IbxxvDUQM/giphy.gif" />
-      <h1>Hi Juls</h1>
-      <p>Will you be my Valentine? 💖</p>
-      <div class="buttons">
-        <button class="yes">Yes 💗</button>
+      <div class="badge">For Juls 💖</div>
+      <h1>Hey Juls</h1>
+      <img class="valentine-img" src="https://media3.giphy.com/media/v1.Y2lkPTc5MGI3NjExNnRuOGhid3dpeW5pbjEwanV2OWx6amppMjB0Ynh2c2c2MTg3NGp6MCZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/MDJ9IbxxvDUQM/giphy.gif" alt="Valentine" />
+      <p>Will you be my Valentine? 💗</p>
+      <div class="button-container">
+        <button class="yes" id="yesBtn">Yes 💗</button>
         <button class="no" id="noBtn">No</button>
       </div>
     </div>
@@ -144,7 +221,7 @@
   <script>
     const wrapper = document.getElementById('wrapper');
     const continueBtn = document.getElementById('continueBtn');
-    const yesBtn = document.querySelector('.yes');
+    const yesBtn = document.getElementById('yesBtn');
     const noBtn = document.getElementById('noBtn');
 
     wrapper.addEventListener('click', e => {
@@ -158,19 +235,36 @@
       setTimeout(() => {
         document.body.classList.add('show-paper');
         wrapper.style.display = 'none';
-
-        // NO stays in normal flow under YES (CSS-controlled)
       }, 600);
     }, { once:true });
 
     let dodgeCount = 0;
-    const MAX_DODGES = 7;
+    const MAX_DODGES = 15;
+    
+    const banterTexts = [
+      'No',
+      'Nope 😏',
+      'Still no 🙃',
+      'Not happening 😜',
+      'Nice try! 😆',
+      'Nah 🤪',
+      'Keep trying 😝',
+      'Almost! ...not 😂',
+      'So close! 🤭',
+      'Try again 😋',
+      'Getting tired? 😌',
+      'One more time? 🙈',
+      'Really? 😅',
+      'Come on... 🥺',
+      'Fine... maybe 😳'
+    ];
 
     function moveNo(e){
       e.preventDefault();
+      e.stopPropagation();
 
       if(dodgeCount >= MAX_DODGES){
-        noBtn.textContent = 'okay okay 😳';
+        noBtn.textContent = 'okay okay YES 💖';
         noBtn.classList.add('surrender');
         yesBtn.classList.add('highlight');
         noBtn.removeEventListener('click', moveNo);
@@ -179,25 +273,52 @@
       }
 
       dodgeCount++;
+      
+      // Update button text with banter
+      noBtn.textContent = banterTexts[dodgeCount % banterTexts.length];
 
-      const paper = document.querySelector('.paper');
-      const paperRect = paper.getBoundingClientRect();
+      const container = document.querySelector('.button-container');
+      const containerRect = container.getBoundingClientRect();
       const noRect = noBtn.getBoundingClientRect();
       const yesRect = yesBtn.getBoundingClientRect();
-      const pad = 16;
+      
+      const pad = 5; // Reduced padding for more range
+      
+      // Calculate boundaries within container
+      const minX = pad;
+      const maxX = containerRect.width - noRect.width - pad;
+      const minY = 55; // Below Yes button
+      const maxY = containerRect.height - noRect.height - pad;
 
       let x, y;
+      let attempts = 0;
+      let tooClose;
+      
       do{
-        x = pad + Math.random() * (paperRect.width - noRect.width - pad*2);
-        y = (yesRect.bottom - paperRect.top) + 40 + Math.random() * 140;
-      } while(
-        x < yesRect.left - paperRect.left + noRect.width &&
-        x + noRect.width > yesRect.left - paperRect.left &&
-        y < yesRect.bottom - paperRect.top &&
-        y + noRect.height > yesRect.top - paperRect.top
-      );
+        // Random position within container - more unpredictable
+        x = minX + Math.random() * (maxX - minX);
+        y = minY + Math.random() * (maxY - minY);
+        attempts++;
+        
+        // Check if too close to Yes button (relative to container)
+        const yesX = yesRect.left - containerRect.left;
+        const yesY = yesRect.top - containerRect.top;
+        
+        const buffer = 10; // Smaller buffer for more chaos
+        tooClose = (
+          x < yesX + yesRect.width + buffer &&
+          x + noRect.width > yesX - buffer &&
+          y < yesY + yesRect.height + buffer &&
+          y + noRect.height > yesY - buffer
+        );
+        
+      } while(tooClose && attempts < 100);
 
-      noBtn.style.transform = `translate(${x - paperRect.width/2}px, ${y}px)`;
+      // Apply position with faster transition
+      noBtn.style.transition = 'all .2s cubic-bezier(.25,.8,.25,1)';
+      noBtn.style.left = x + 'px';
+      noBtn.style.top = y + 'px';
+      noBtn.style.transform = 'none';
     }
 
     noBtn.addEventListener('click', moveNo);

@@ -21,7 +21,7 @@
     .lid{position:absolute;height:100%;width:100%;top:0;left:0;border-right:150px solid transparent;border-bottom:100px solid transparent;border-left:150px solid transparent;transform-origin:top;transform-style:preserve-3d;backface-visibility:hidden;transition:transform .55s cubic-bezier(.22,.61,.36,1)}
     .lid.one{border-top:100px solid #f9f7f3;z-index:3;transition-delay:.75s}
     .lid.two{border-top:100px solid #f9f7f3;transform:rotateX(90deg);z-index:1;transition-delay:.5s}
-    .envelope{position:absolute;height:100%;width:100%;top:0;left:0;border-top:100px solid transparent;border-right:150px solid #f9f7f3;border-bottom:100px solid #f2efe9;border-left:150px solid #f5f2ec;z-index:3;background-image:radial-gradient(rgba(0,0,0,.03) 1px, transparent 1px);background-size:6px 6px;filter:brightness(.98)}
+    .envelope{position:absolute;height:100%;width:100%;top:0;left:0;border-top:100px solid transparent;border-right:150px solid #f9f7f3;border-bottom:100px solid #f2efe9;border-left:150px solid #f5f2ec;z-index:3;filter:brightness(.98)}
     .wrapper.open .envelope{pointer-events:none}
     .letter{position:absolute;top:0;width:80%;height:80%;background:#fff;border-radius:15px;z-index:2;transition:transform .5s ease;display:flex;align-items:center;justify-content:center;pointer-events:none}
     .wrapper.open .letter{pointer-events:auto}
@@ -40,7 +40,6 @@
     .paper-page{position:fixed;inset:0;display:flex;align-items:center;justify-content:center;opacity:0;pointer-events:none;transition:opacity .6s ease;z-index:10;background:linear-gradient(180deg,#fde6ee,#fff6e8)}
     body.show-paper .paper-page{opacity:1;pointer-events:auto}
 
-    /* iPhone canvas – Apple‑like layout */
     .paper{
       width:100%;
       max-width:390px;
@@ -56,8 +55,6 @@
       font-family:-apple-system,BlinkMacSystemFont,'SF Pro Display','SF Pro Text',Helvetica,Arial,sans-serif;
       position:relative;
       overflow:hidden;
-      border-radius:55px;
-      box-shadow:0 25px 50px rgba(0,0,0,.15);
     }
 
     .badge{
@@ -100,7 +97,6 @@
       margin:12px 0 4px;
     }
 
-    /* ===== BUTTON ZONE (SIMPLIFIED) ===== */
     .button-container{
       position:absolute;
       bottom:60px;
@@ -153,58 +149,63 @@
       top:55px;
       left:50%;
       transform:translateX(-50%);
-      width:50%;
-      max-width:160px;
-      padding:9px;
+      width:auto;
+      max-width:none;
+      min-width:90px;
+      padding:9px 14px;
       border-radius:10px;
       border:1px solid rgba(0,0,0,.12);
       background:#fff;
       color:#1c1c1e;
       font-size:13px;
       font-weight:500;
+      white-space:nowrap;
       cursor:pointer;
       z-index:5;
-      transition:all .15s cubic-bezier(.25,.8,.25,1);
+      transition:all .2s cubic-bezier(.25,.8,.25,1);
     }
 
     .no.surrender{animation:shake .35s ease-in-out 2}
     @keyframes shake{0%,100%{transform:translateX(-50%)}25%{transform:translateX(-54%)}50%{transform:translateX(-46%)}75%{transform:translateX(-52%)}}
 
-    /* ===== CELEBRATION ===== */
-    .celebrate{
-      position:fixed;
-      inset:20px;
-      display:flex;
-      flex-direction:column;
-      align-items:center;
-      justify-content:center;
-      background:linear-gradient(180deg,#ffdde7,#fff6f9);
-      z-index:20;
-      opacity:0;
-      pointer-events:none;
-      transition:opacity .5s ease;
-      border-radius:55px;
-      box-shadow:0 25px 50px rgba(0,0,0,.15);
-      max-width:390px;
-      max-height:844px;
-      margin:auto;
-    }
+    .celebrate{position:fixed;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;background:linear-gradient(180deg,#ffdde7,#fff6f9);z-index:20;opacity:0;pointer-events:none;transition:opacity .5s ease}
     body.show-celebrate .celebrate{opacity:1;pointer-events:auto}
     
     .celebrate h1{
-      font-size:40px;
-      font-weight:700;
-      color:#ff6f85;
+      font-family:'Playfair Display','Georgia',serif;
+      font-size:44px;
+      font-weight:600;
+      letter-spacing:.5px;
+      color:#e75480;
+      margin-bottom:10px;
       z-index:21;
-      font-family:-apple-system,BlinkMacSystemFont,'SF Pro Display','Helvetica Neue',Helvetica,Arial,sans-serif;
-      letter-spacing:-1px;
-      text-align:center;
+      text-shadow:0 6px 18px rgba(231,84,128,.25);
+    }
+
+    .celebrate p{
+      font-family:'Playfair Display','Georgia',serif;
+      font-size:22px;
+      font-weight:500;
+      color:#c2185b;
+      opacity:.9;
+      margin-bottom:24px;
+      z-index:21;
+      letter-spacing:.3px;
+    }
+
+    .celebrate-img{
+      width:180px;
+      height:180px;
+      border-radius:24px;
+      object-fit:cover;
+      box-shadow:0 20px 40px rgba(0,0,0,.15);
+      margin-bottom:24px;
+      z-index:21;
     }
 
     .emoji-rain{position:fixed;inset:0;overflow:hidden;pointer-events:none}
     .emoji{position:absolute;font-size:24px;animation:fall 3.5s linear infinite}
     @keyframes fall{from{transform:translateY(-10vh);opacity:1}to{transform:translateY(110vh);opacity:0}}
-  
   </style>
 </head>
 <body>
@@ -236,7 +237,9 @@
   </div>
 
   <div class="celebrate">
-    <h1>SHE SAID YES 💖</h1>
+    <h1>She said yes 💖</h1>
+    <p>Happy Valentine Day Juls</p>
+    <img class="celebrate-img" src="https://media2.giphy.com/media/v1.Y2lkPTc5MGI3NjExbDB2cTQ4d3E1MGZvdnczbGQzaWlreWg5OGlwem94OGtsc2N2MjV5MSZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/13ByqbM0hgfN7y/giphy.gif" alt="Celebration GIF" />
     <div class="emoji-rain" id="emojiRain"></div>
   </div>
 
@@ -261,6 +264,7 @@
     }, { once:true });
 
     let dodgeCount = 0;
+    // infinite dodge mode
     
     const banterTexts = [
       'No',
@@ -274,68 +278,87 @@
       'So close! 🤭',
       'Try again 😋',
       'Getting tired? 😌',
-      'One more time? 🙈',
-      'Really? 😅',
-      'Come on... 🥺',
-      'You sure? 🤔',
-      'Think about it 💭',
-      'Maybe not 😬',
-      'Hmm... no 🤷',
-      'Still nope 🙅',
-      'Never! 😤'
+      'One more rep? 🏋️‍♀️',
+      'Train harder 😤',
+      'Leg day says no 🦵',
+      'Cardio first 😈',
+      'Lift heavier 😏',
+      'No pain no gain 💪',
+      'Hydrate first 🥤',
+      'Warm up properly 😌',
+      'Spot me maybe? 👀',
+      'PR or nothing 🔥',
+      'Rest day? never 😆'
     ];
 
     function moveNo(e){
       e.preventDefault();
       e.stopPropagation();
 
-      dodgeCount++;
       
-      // Update button text with banter (loops infinitely)
+      dodgeCount++;
       noBtn.textContent = banterTexts[dodgeCount % banterTexts.length];
 
       const container = document.querySelector('.button-container');
       const containerRect = container.getBoundingClientRect();
       const noRect = noBtn.getBoundingClientRect();
       const yesRect = yesBtn.getBoundingClientRect();
-      
-      const pad = 5; // Minimal padding for maximum range
-      
-      // Calculate boundaries within container - maximize movement area
+
+      const pad = 10;
       const minX = pad;
       const maxX = containerRect.width - noRect.width - pad;
-      const minY = 50; // Start just below Yes button
-      const maxY = containerRect.height - noRect.height - pad; // Use full height
+      const minY = pad;
+      const maxY = containerRect.height - noRect.height - pad;
 
-      let x, y;
-      let attempts = 0;
-      let tooClose;
-      
+      const clientX = e.touches ? e.touches[0].clientX : e.clientX;
+      const clientY = e.touches ? e.touches[0].clientY : e.clientY;
+      const tapX = clientX - containerRect.left;
+      const tapY = clientY - containerRect.top;
+
+      const yesX = yesRect.left - containerRect.left;
+      const yesY = yesRect.top - containerRect.top;
+
+      let x, y, attempts = 0;
+      let overlaps;
+
       do{
-        // Random position within container - full range
-        x = minX + Math.random() * (maxX - minX);
-        y = minY + Math.random() * (maxY - minY);
-        attempts++;
-        
-        // Check if too close to Yes button (relative to container)
-        const yesX = yesRect.left - containerRect.left;
-        const yesY = yesRect.top - containerRect.top;
-        
-        const buffer = 10; // Smaller buffer for more movement space
-        tooClose = (
+        // Bias movement away from tap point but keep randomness
+        const angle = Math.atan2((minY+maxY)/2 - tapY, (minX+maxX)/2 - tapX);
+        const randomSpread = (Math.random() - 0.5) * Math.PI; // natural variation
+        const distance = Math.max(containerRect.width, containerRect.height) * (0.6 + Math.random()*0.6);
+
+        x = tapX + Math.cos(angle + randomSpread) * distance;
+        y = tapY + Math.sin(angle + randomSpread) * distance;
+
+        // Clamp inside safe zone
+        x = Math.max(minX, Math.min(maxX, x));
+        y = Math.max(minY, Math.min(maxY, y));
+
+        const buffer = 14;
+        overlaps = (
           x < yesX + yesRect.width + buffer &&
           x + noRect.width > yesX - buffer &&
           y < yesY + yesRect.height + buffer &&
           y + noRect.height > yesY - buffer
         );
-        
-      } while(tooClose && attempts < 100);
 
-      // Apply position with fast transition
-      noBtn.style.transition = 'all .15s cubic-bezier(.25,.8,.25,1)';
+        attempts++;
+      } while(overlaps && attempts < 40);
+
+            // acceleration based on dodge count
+      const speed = Math.max(0.18, 0.32 - dodgeCount * 0.01);
+      const rotation = (Math.random() - 0.5) * 40; // slight random rotation
+
+      noBtn.style.transition = `all ${speed}s cubic-bezier(.22,.61,.36,1)`;
       noBtn.style.left = x + 'px';
       noBtn.style.top = y + 'px';
-      noBtn.style.transform = 'none';
+      noBtn.style.transform = `rotate(${rotation}deg) scale(1.05)`;
+
+      // tiny bounce on landing
+      setTimeout(() => {
+        noBtn.style.transition = 'transform .15s ease-out';
+        noBtn.style.transform = 'rotate(0deg) scale(1)';
+      }, speed * 1000);
     }
 
     noBtn.addEventListener('click', moveNo);
